@@ -1,0 +1,11 @@
+{
+  "mode": "SYNTHETIC_FIXTURE",
+  "source": "LOCAL_DETERMINISTIC_TEST_DATA_NOT_LIVE",
+  "markets": [
+    {"symbol":"BTCUSDT","asset_class":"crypto_spot","price":50000,"bid":49999,"ask":50000,"daily_volume":1300,"avg_daily_volume_30d":1000,"depth_usd_10bps":300,"news_risk":false,"earnings_tomorrow":null,"funding_rate":null,"momentum":0.8,"trend":0.8,"qty_step":0.00001,"min_notional":5.0,"source_time_utc":"FIXTURE"},
+    {"symbol":"ETHUSDT","asset_class":"crypto_spot","price":3200,"bid":3180,"ask":3200,"daily_volume":800,"avg_daily_volume_30d":1000,"depth_usd_10bps":35,"news_risk":false,"earnings_tomorrow":null,"funding_rate":null,"momentum":0.9,"trend":0.9,"qty_step":0.0001,"min_notional":5.0,"source_time_utc":"FIXTURE"},
+    {"symbol":"AAPL","asset_class":"us_equity","price":260,"bid":259.9,"ask":260,"daily_volume":1000000,"avg_daily_volume_30d":950000,"depth_usd_10bps":10000,"news_risk":null,"earnings_tomorrow":null,"funding_rate":null,"momentum":0.9,"trend":0.9,"qty_step":1,"min_notional":1.0,"source_time_utc":"FIXTURE"},
+    {"symbol":"SOLUSDT-PERP","asset_class":"crypto_perp","price":180,"bid":179.99,"ask":180,"daily_volume":1200,"avg_daily_volume_30d":1000,"depth_usd_10bps":1000,"news_risk":false,"earnings_tomorrow":null,"funding_rate":0.002,"momentum":0.9,"trend":0.9,"qty_step":0.001,"min_notional":5,"source_time_utc":"FIXTURE"},
+    {"symbol":"ADAUSDT","asset_class":"crypto_spot","price":0.5,"bid":0.4999,"ask":0.5,"daily_volume":1000,"avg_daily_volume_30d":500,"depth_usd_10bps":300,"news_risk":false,"earnings_tomorrow":null,"funding_rate":null,"momentum":0.35,"trend":0.40,"qty_step":1,"min_notional":5,"source_time_utc":"FIXTURE"}
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "blockchain-trade-bot",
+  "version": "0.1.1",
+  "description": "Six-agent, fail-closed stock and crypto research desk with offline paper simulation, transparent risk gates and immutable-style audit receipts. No real trading tools or wallet access.",
+  "author": {
+    "name": "Eren Uludemir"
+  },
+  "keywords": [
+    "paper-trading",
+    "blockchain",
+    "trading-desk",
+    "risk-management",
+    "audit",
+    "agents"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Blockchain-Trade-Bot",
+        "shortDescription": "6-agent paper trading desk",
+        "longDescription": "Research-first six-agent workflow for stocks and crypto with deterministic handoffs: Scout, Filter, Analyst, Risk, Executor, Logger. Ships an offline $50 paper portfolio engine, Binance public read-only snapshot collector, risk and data-quality gates, kill log and SHA-256-chained event receipts. Can describe integration patterns for NautilusTrader, HyperGrok and NVIDIA-derived skill governance, but does not include a live broker, API wallet, hosted service, always-on worker, or live trade execution. No profits are promised.",
+        "developerName": "Eren Uludemir",
+        "category": "Finance",
+        "capabilities": [
+          "Interactive"
+        ],
+        "defaultPrompt": [
+          "Blockchain-Trade-Bot: Run the $50 paper-trading risk checklist with six agents.",
+          "Audit a proposed stock or crypto trade; report every failing gate.",
+          "Explain the overnight read-only monitor and validation plan."
+        ]
+      }
+    }
+  }
+}
