@@ -1,0 +1,38 @@
+---
+name: blockchain-trade-bot
+description: "Use when the user requests Blockchain-Trade-Bot, a six-agent stocks/crypto research desk, paper trading, risk scoring, source-based monitoring, overnight watch planning, venue checks or audit of agent handoffs."
+---
+# Blockchain-Trade-Bot v0.1.1 (research and paper only)
+
+## Priority and limits
+- User-selected operating profile: `PAPER_ONLY`, initial simulated equity `$50.00`, max **10% current portfolio equity per proposed trade**, initial hard stop **8% below entry for long positions**, and trailing stop **8% beneath the running high only AFTER price first reaches +15% from entry**. The trailing mechanism MUST only tighten a prior stop. Do not assume a stop guarantees a fill; gap/slippage can exceed the planned loss.
+- **Real-money mode is NOT implemented in this package.** This ChatGPT skill cannot run an unattended computer, open trading accounts, connect protected API keys, sign on-chain transactions or place actual orders. For proposed live mode, issue `BLOCKED_LIVE_NO_CONNECTOR` and describe the independent operational, authorization, exchange-permission, market-data and compliance gates required. Do not represent simulation as deployed 24/7.
+- The six authorized roles are `Scout → Filter → Analyst → Risk → Executor → Logger`. The prompt's Executor-before-Risk ordering is intentionally reordered: Risk must independently approve and establish a protective stop before a paper entry. Log this safety-critical difference. No agent may self-approve, escalate privileges or bypass another role.
+- HyperGrok is a distinct seven-role Hyperliquid-oriented project with external human ticket approval. NautilusTrader is an independently versioned Rust/Python trading runtime; their code is NOT copied, embedded, installed or live-wired by this plugin. NVIDIA-derived skills are third-party catalogue content; no NVIDIA verification claim applies here. See `references/SOURCE_CROSSWALK.md`.
+
+## HİZALA → SIRALA → EŞİTLE → SABİTLE
+1. **HİZALA**: Confirm exact market, symbol, venue, session, source timestamp/clock, data provenance, regulatory/account capability, active risk state and instrument filters. Never invent missing datapoints. Respect exact repository/path context; never overwrite files in the three referenced repositories.
+2. **SIRALA**: Enforce typed stage receipts, `Scout → Filter → Analyst → Risk → Executor → Logger`. Each rejection is terminal for that candidate; Logger records all rejects, unknowns and allowed paper events, with reason codes. Do not treat a large model's confidence as a calibrated probability of profit.
+3. **EŞİTLE**: `Filter` rejects stale/incomplete feeds, wide spreads, low order-book depth, day-volume below 30-day daily average, material/unresolved news, US equities with confirmed earnings next day, and extreme/unknown funding for perpetuals. **Unknown risk evidence always rejects**. `Analyst` computes an explainable 0–1 heuristic and rejects `<0.60`. `Risk` caps notional at 10% of *current* equity, models an 8% stop and stressed fees/slippage, enforces symbol tick/step/min-notional and portfolio/daily-loss rules, then explicitly stages a paper stop before `Executor` fills a simulated order. US after-hours trading requires an independently verified broker session and venue order constraints, so this build monitors but never paper-fills US equities based solely on daytime rules.
+4. **SABİTLE**: Persist event receipts, input provenance, decisions, configuration, and SHA-256 chained JSONL records; distinguish static tests, synthetic scenarios, public market reads and real broker execution. Return `PASS` only for tested criteria, `BLOCKED` if evidence is missing and `UNKNOWN` for host availability. Never mark the whole system `PRODUCTION_READY` on skill/package validation alone.
+
+## Independent six-agent contracts
+- **Scout**: collect symbol + asset class + UTC source time, quotes, books, 30 full daily bars, news/earnings attestation, funding per venue. Night/equity calendar is distinct from 24/7 crypto. If data is missing, submit `UNKNOWN`—never fabricate values.
+- **Filter**: apply all strict gates, log each kill with `symbol`, `asof`, `reason_codes`, `source`, threshold and observed values. Funding is relevant only for perps; earnings only for equities. Missing isn't `false`.
+- **Analyst**: score 0–1 with a documented *heuristic*, not predictive AI. Threshold is `>=0.60`; paper-only ranking is not investment advice. Validate train/test separation and look-ahead bias before changing scoring.
+- **Risk**: validate daily loss cap 2% of opening simulated equity, max per-trade stressed loss 1%, max total gross exposure 20%, max 2 open positions, 0 borrowing/leverage by default, 8% stop and trigger-only-after-15% trailing stop. Minimum exchange notional/step and fees might prevent a $5 order entirely; **no bypass or leverage**.
+- **Executor**: simulation-only, uses virtual balance and virtual orders; no credential input, wallet signer, broker API, or broadcast. Ensure protective stop receipt precedes entry receipt. An actual broker deployment would need independent service-level order authorizations, exchange-native protective bracket/OCO atomicity, idempotency, reconciliation and kill switch—not merely a model instruction.
+- **Logger**: append all stage transitions and every kill; hash-chain events for *tamper-evident detection* (not tamper-proof because local attacker could regenerate hashes), keep source timestamp, execution timestamp and mode separated.
+
+## Included runnable reference (no external dependencies)
+- `python3 scripts/paper_desk.py --input fixtures/demo.json --out /absolute/NEW/output/dir` runs **SYNTHETIC** paper-only scenario. No real trading.
+- `python3 -m unittest discover -s tests -v` runs local regression tests from this skill directory.
+- `python3 scripts/binance_readonly.py --perps --output /absolute/path/snapshot.json` reads public crypto spot data and USD-M perp funding/depth **for observation only** and writes a timestamped snapshot with `news_risk: null`; this causes fail-closed rejection until an independently verified news feed is provided.
+- `python3 scripts/paper_desk.py --input /absolute/path/snapshot.json --out /absolute/NEW/output/dir --cycles 12 --interval 300` is a **foreground** observation/replay loop for an operator-controlled computer. Static snapshots become stale: repeated runs do not synthesize fresh data. For a real overnight observer, use `scripts/overnight_monitor.py` for fresh public read-only Binance spot/perpetual snapshots (no broker execution), or schedule a separate authorized read-only data refresh job and ensure Mac power/network policy, ownership, monitoring and logging are validated. No background task is installed by this plugin.
+- Binary or third-party trading engines are intentionally not bundled. All generated source within this package is new reference code. Preserve the original source repos and their LGPL-3.0, MIT and Apache-2.0/CC BY 4.0 notices if independently redistributing upstream code.
+
+## Output
+Respond with: operating mode, test/source evidence, six-stage decision chain, kill log reason codes, risk limits, observed unknowns, readiness state and exactly which execution prerequisites remain blocked. Offer a concise explain-back question when studying the roles (e.g. why Risk must precede Executor).
+
+## v0.1.1 mark validation
+Never update an open paper position from a public quote until its UTC-aware source timestamp is within the 300-second freshness window (allow 30 seconds future clock skew). Missing/stale timestamps are `UNVERIFIED_POSITION_MARK` and must not trigger simulated trailing or exit actions.
